@@ -22,28 +22,28 @@ namespace NationalCookies.Controllers
         }
 
 
-        public IActionResult Detail(int id)
+        public IActionResult Detail(string id)
         {            
              var order = _orderService.GetOrderById(id);           
 
             return View(order);
         }
 
-        public IActionResult CancelOrder(int id)
+        public IActionResult CancelOrder(string id)
         {
             _orderService.CancelOrder(id);            
 
             return RedirectToAction("Index");
         }
 
-        public IActionResult PlaceOrder(int id)
+        public IActionResult PlaceOrder(string id)
         {
             _orderService.PlaceOrder(id);            
 
             return RedirectToAction("Index");
         }
 
-        public IActionResult AddCookieToOrderLine(int cookieId)
+        public IActionResult AddCookieToOrderLine(string cookieId)
         {
             _orderService.AddCookieToOrder(cookieId);            
 

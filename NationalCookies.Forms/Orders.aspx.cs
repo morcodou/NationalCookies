@@ -35,17 +35,17 @@ namespace NationalCookies.Forms
             if (Request.QueryString.Count > 0)
             {
                 //try to get th order id from the querystring
-                int orderId = -1;
-                if (int.TryParse(Request.QueryString["id"], out orderId))
+                Guid orderId = Guid.Empty;
+                if (Guid.TryParse(Request.QueryString["id"], out orderId))
                 {
                     //get the action and act on that
                     switch (Request.QueryString["action"])
                     {
                         case "CancelOrder":
-                            _orderService.CancelOrder(orderId);
+                            _orderService.CancelOrder(orderId.ToString());
                             break;
                         case "PlaceOrder":
-                            _orderService.PlaceOrder(orderId);
+                            _orderService.PlaceOrder(orderId.ToString());
                             break;
                         default:
                             break;

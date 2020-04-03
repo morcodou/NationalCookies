@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using NationalCookies.Data;
 using NationalCookies.Data.Interfaces;
 using NationalCookies.Data.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace NationalCookies
 {
@@ -38,7 +40,7 @@ namespace NationalCookies
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<ICookieService, CookieService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,13 +69,18 @@ namespace NationalCookies
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute();
-            //    //routes.MapRoute(
-            //    //    name: "default",
-            //    //    template: "{controller=Home}/{action=Index}/{id?}");
-            //});
+            InitializeDbContextAsync(app.ApplicationServices).Wait();
+        }
+
+        public static async Task InitializeDbContextAsync (IServiceProvider provider)
+        {
+            using (var scope = provider.CreateScope())
+            {
+                using (var cookieContext = scope.ServiceProvider.GetService<CookieContext>())
+                {
+                    await cookieContext.EnsureCreatedAndSeedAsync();
+                }
+            }
         }
     }
 }

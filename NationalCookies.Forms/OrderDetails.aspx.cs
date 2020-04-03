@@ -36,11 +36,11 @@ namespace NationalCookies.Forms
             if (Request.QueryString.Count > 0)
             {
                 //try and get the order id
-                int orderId = -1;
-                if (int.TryParse(Request.QueryString["id"], out orderId))
+                Guid orderId = Guid.Empty;
+                if (Guid.TryParse(Request.QueryString["id"], out orderId))
                 {
                     //load the order into the model
-                    Model = _orderService.GetOrderById(orderId);
+                    Model = _orderService.GetOrderById(orderId.ToString());
                 }
             }
         }

@@ -1,6 +1,5 @@
-﻿using NationalCookies.Data.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.EntityFrameworkCore;
+using NationalCookies.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +20,11 @@ namespace NationalCookies.Data.Services
         /// <summary>
         /// Adds cookies to orders
         /// </summary>
-        /// <param name="cookieId"></param>
-        public void AddCookieToOrder(int cookieId)
+        /// <param name="cookieGuidId"></param>
+        public void AddCookieToOrder(string cookieGuidId)
         {
+            var cookieId = new Guid(cookieGuidId);
+
             //get the oder with the status new (if any)
             Order currentOrder = _context.Orders
                                       .Where(o => o.Status == "New")
@@ -115,8 +116,10 @@ namespace NationalCookies.Data.Services
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public Order GetOrderById(int orderId)
+        public Order GetOrderById(string orderGuidId)
         {
+            var orderId = new Guid(orderGuidId);
+
             //get the order by id
             Order order = _context.Orders
                         .Include(o => o.OrderLines)
@@ -132,8 +135,10 @@ namespace NationalCookies.Data.Services
         /// deletes an order
         /// </summary>
         /// <param name="orderId"></param>
-        public void CancelOrder(int orderId)
+        public void CancelOrder(string orderGuidId)
         {
+            var orderId = new Guid(orderGuidId);
+
             //the order is in the database, remove it
             var order = _context.Orders.Where(o => o.Id == orderId).FirstOrDefault();
             if (order != null)
@@ -147,8 +152,10 @@ namespace NationalCookies.Data.Services
         /// places an order by chaning it status to "Placed"
         /// </summary>
         /// <param name="orderId"></param>
-        public void PlaceOrder(int orderId)
+        public void PlaceOrder(string orderGuidId)
         {
+            var orderId = new Guid(orderGuidId);
+            
             //get the order
             var order = _context.Orders.Where(o => o.Id == orderId).FirstOrDefault();
             if (order != null)
@@ -162,5 +169,4 @@ namespace NationalCookies.Data.Services
             }
         }
     }
-
 }

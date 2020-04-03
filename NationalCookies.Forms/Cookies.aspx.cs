@@ -35,11 +35,11 @@ namespace NationalCookies.Forms
             if (Request.QueryString.Count > 0)
             {
                 //try and get the cookieid
-                int cookieId = -1;
-                if (int.TryParse(Request.QueryString["CookieId"], out cookieId))
+                Guid cookieId = Guid.Empty;
+                if (Guid.TryParse(Request.QueryString["CookieId"], out cookieId))
                 {
                     //add the cookie to the order
-                    _orderService.AddCookieToOrder(cookieId);
+                    _orderService.AddCookieToOrder(cookieId.ToString());
                     Response.Redirect("Orders.aspx");
                 }
             }

@@ -1,18 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NationalCookies.Data.Interfaces
 {
     public interface IOrderService
     {
-        void AddCookieToOrder(int cookieId);
+        void AddCookieToOrder(string cookieGuidId);
 
         List<Order> GetAllOrders();
 
-        Order GetOrderById(int orderId);
+        Order GetOrderById(string orderGuidId);
 
-        void CancelOrder(int orderId);
+        void CancelOrder(string orderGuidId);
 
-        void PlaceOrder(int orderId);
+        void PlaceOrder(string orderGuidId);
 
     }
 }
