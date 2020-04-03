@@ -32,8 +32,21 @@ namespace NationalCookies
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<CookieContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CookieDBConnection")));
-            
+            var useCosmos = $"{Configuration["UseCosmos"]}".ToUpper() == "TRUE";
+            if (useCosmos)
+            {
+                var accountEndpoint = Configuration["CosmosCookie:AccountEndpoint"];
+                var databaseName = Configuration["CosmosCookie:DatabaseName"];
+                var authKeyName = Configuration["CosmosCookie:AccountKeyName"];
+                var accountKey = Environment.GetEnvironmentVariable(authKeyName);
+
+                services.AddDbContext<CookieContext>(options => options.UseCosmos(accountEndpoint, accountKey, databaseName));
+            }
+            else
+            {
+                services.AddDbContext<CookieContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CookieDBConnection")));
+            }
+
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<ICookieService, CookieService>();
 

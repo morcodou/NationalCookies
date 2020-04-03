@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace NationalCookies.Data
 {
@@ -22,7 +23,15 @@ namespace NationalCookies.Data
 
         public List<OrderLine> OrderLines { get; set; }
 
+        public Order IncludeLines(CookieContext cookieContext)
+        {
+            OrderLines = cookieContext
+                .OrderLines
+                .Where(ol => ol.OrderId == Id)
+                .Select(ol => ol.IncludCookie(cookieContext, this))
+                .ToList();
 
-
+            return this;
+        }
     }
 }

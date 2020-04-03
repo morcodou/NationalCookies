@@ -28,8 +28,8 @@ namespace NationalCookies.Data.Services
             //get the oder with the status new (if any)
             Order currentOrder = _context.Orders
                                       .Where(o => o.Status == "New")
-                                      .Include(o => o.OrderLines)
-                                        .ThenInclude(OrderLine => OrderLine.Cookie)
+                                      //.Include(o => o.OrderLines)
+                                      //.ThenInclude(OrderLine => OrderLine.Cookie)
                                       .FirstOrDefault();
 
             //if there is a order with status new
@@ -90,8 +90,6 @@ namespace NationalCookies.Data.Services
                 _context.Add(currentOrder);
                 _context.SaveChanges();
             }
-
-
         }
 
         /// <summary>
@@ -100,9 +98,10 @@ namespace NationalCookies.Data.Services
         /// <returns></returns>
         public List<Order> GetAllOrders()
         {
+
             //get orders from the database
             var orders = _context.Orders
-                            .Include(o => o.OrderLines)
+                            //.Include(o => o.OrderLines)
                             .ToList();
 
             //sort the orders by date
@@ -122,11 +121,11 @@ namespace NationalCookies.Data.Services
 
             //get the order by id
             Order order = _context.Orders
-                        .Include(o => o.OrderLines)
-                            .ThenInclude(OrderLine => OrderLine.Cookie)
+                        //.Include(o => o.OrderLines)
+                        //.ThenInclude(OrderLine => OrderLine.Cookie)
                         .Where(o => o.Id == orderId).FirstOrDefault();
 
-            return order;
+            return order.IncludeLines(_context) ;
         }
 
 
@@ -155,7 +154,7 @@ namespace NationalCookies.Data.Services
         public void PlaceOrder(string orderGuidId)
         {
             var orderId = new Guid(orderGuidId);
-            
+
             //get the order
             var order = _context.Orders.Where(o => o.Id == orderId).FirstOrDefault();
             if (order != null)

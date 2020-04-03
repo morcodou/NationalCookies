@@ -14,5 +14,17 @@ namespace NationalCookies.Data
         public Cookie Cookie { get; set; }
         public Guid OrderId { get; set; }
         public Order Order { get; set; }
+
+        public OrderLine IncludCookie(CookieContext cookieContext)
+        {
+            Cookie = cookieContext .Cookies.Find(CookieId);
+            return this;
+        }
+        public OrderLine IncludCookie(CookieContext cookieContext, Order order)
+        {
+            Order = order;
+            return IncludCookie(cookieContext);
+        }
+
     }
 }

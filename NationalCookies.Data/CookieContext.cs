@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace NationalCookies.Data
 {
@@ -20,6 +21,12 @@ namespace NationalCookies.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            ////modelBuilder.Entity<OrderLine>().HasOne(o => o.Order);
+            //modelBuilder.HasDefaultContainer("Cookies");
+            ////modelBuilder.Entity<Order>().OwnsMany<OrderLine>(o => o.OrderLines);
+            //modelBuilder.Entity<OrderLine>().OwnsOne<Cookie>(o => o.Cookie);
+            ////modelBuilder.Entity<OrderLine>().OwnsOne<Order>(o => o.Order);
+            ////modelBuilder.Entity<Order>().OwnsMany(o => o.OrderLines);
         }
 
         public DbSet<Order> Orders { get; set; }
