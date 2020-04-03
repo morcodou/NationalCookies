@@ -32,11 +32,8 @@ namespace NationalCookies
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<CookieContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("CookieDBConnection")));
-
-
-
+            services.AddDbContext<CookieContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CookieDBConnection")));
+            
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<ICookieService, CookieService>();
 
@@ -72,7 +69,7 @@ namespace NationalCookies
             InitializeDbContextAsync(app.ApplicationServices).Wait();
         }
 
-        public static async Task InitializeDbContextAsync (IServiceProvider provider)
+        public static async Task InitializeDbContextAsync(IServiceProvider provider)
         {
             using (var scope = provider.CreateScope())
             {

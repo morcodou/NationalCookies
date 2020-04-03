@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -29,7 +30,7 @@ namespace NationalCookies.Data
         {
             await this.Database.EnsureCreatedAsync();
 
-            bool hasCookies = await this.Cookies.AnyAsync();
+            bool hasCookies = this.Cookies.Any();
             if (!hasCookies)
             {
                 var cookies = new List<Cookie>()
