@@ -23,7 +23,7 @@ namespace NationalCookies.Forms
 
             var context = new CookieContext(optionsBuilder.Options);
 
-            _cookieService = new CookieService(context);
+            _cookieService = new CookieService(context, null);
             _orderService = new OrderService(context);
         }
 

@@ -47,6 +47,15 @@ namespace NationalCookies
                 services.AddDbContext<CookieContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CookieDBConnection")));
             }
 
+            var redisConnectionName = Configuration.GetConnectionString("RedisConnectionName");
+            var redisConnection = Environment.GetEnvironmentVariable(redisConnectionName);
+
+            services.AddDistributedRedisCache(option =>
+            {
+                option.Configuration = redisConnection;
+                option.InstanceName = "master";
+            });
+
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<ICookieService, CookieService>();
 
