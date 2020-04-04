@@ -17,13 +17,26 @@ namespace NationalCookies.Forms
         public Cookies()
         {
             //instantiate services
-            var optionsBuilder =
-                new DbContextOptionsBuilder()
-                    .UseSqlServer(ConfigurationManager.ConnectionStrings["CookieDBConnection"].ConnectionString);
+            var optionsBuilder = new DbContextOptionsBuilder();
+
+            var useCosmos = $"{ConfigurationManager.AppSettings["UseCosmos"]}".ToUpper() == "TRUE";
+            if (useCosmos)
+            {
+                var accountEndpoint = ConfigurationManager.AppSettings["CosmosAccountEndpoint"];
+                var databaseName = ConfigurationManager.AppSettings["CosmosDatabaseName"];
+                var authKeyName = ConfigurationManager.AppSettings["CosmosAccountKeyName"];
+                var accountKey = Environment.GetEnvironmentVariable(authKeyName);
+
+                optionsBuilder = optionsBuilder.UseCosmos(accountEndpoint, accountKey, databaseName);
+            }
+            else
+            {
+                optionsBuilder = optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["CookieDBConnection"].ConnectionString);
+            }
 
             var context = new CookieContext(optionsBuilder.Options);
-
-            _cookieService = new CookieService(context, null);
+            context.EnsureCreatedAndSeedAsync().Wait();
+            _cookieService = new CookieService(context);
             _orderService = new OrderService(context);
         }
 
@@ -48,7 +61,7 @@ namespace NationalCookies.Forms
         public void GetAllCookies()
         {
             //check if the cookies are in the session
-            if(Session["Cookies"] == null)
+            if (Session["Cookies"] == null)
             {
                 //get all of the cookies
                 Model = _cookieService.GetAllCookies();

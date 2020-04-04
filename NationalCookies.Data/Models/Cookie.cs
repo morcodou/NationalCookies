@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NationalCookies.Data
 {
+    [Serializable ]
     public class Cookie
     {
         [Key]

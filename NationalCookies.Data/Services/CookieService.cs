@@ -19,11 +19,15 @@ namespace NationalCookies.Data.Services
             _cache = cache;
         }
 
+        public CookieService(CookieContext context) : this(context, null)
+        {
+        }
+
         public List<Cookie> GetAllCookies()
         {
             List<Cookie> cookies;
 
-            var cachedCookies = _cache.GetString(CookiesKey);
+            var cachedCookies = _cache?.GetString(CookiesKey);
             if (!string.IsNullOrEmpty(cachedCookies))
             {
                 cookies = JsonConvert.DeserializeObject<List<Cookie>>(cachedCookies);
@@ -35,8 +39,7 @@ namespace NationalCookies.Data.Services
 
                 var options = new DistributedCacheEntryOptions();
                 options.SetAbsoluteExpiration(new System.TimeSpan(0, 0, 15));
-
-                _cache.SetString(CookiesKey, JsonConvert.SerializeObject(cookies), options);
+                _cache?.SetString(CookiesKey, JsonConvert.SerializeObject(cookies), options);
             }
 
             return cookies;
@@ -44,7 +47,7 @@ namespace NationalCookies.Data.Services
 
         public void ClearCache()
         {
-            _cache.Remove(CookiesKey);
+            _cache?.Remove(CookiesKey);
         }
     }
 }
